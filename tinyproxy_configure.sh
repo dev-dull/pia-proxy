@@ -1,11 +1,12 @@
 #!/bin/bash
 
 CONFIG_FILE=/etc/tinyproxy/tinyproxy.conf
+rm ${CONFIG_FILE}
 
 # Get the internal IP address to listen on, and the tunnel IP address to direct traffic to
 # The '-j' flag for the 'ip' command gets you JSON output
-TINYPROXY_Listen=$(ip -j a | jq -r '.[] | select(.ifname=="eth0").addr_info[0].local')
-TINYPROXY_Bind=$(ip -j a | jq -r '.[] | select(.ifname=="tunl0").addr_info[0].local')
+export TINYPROXY_Listen=$(ip -j a | jq -r '.[] | select(.ifname=="eth0").addr_info[0].local')
+export TINYPROXY_Bind=$(ip -j a | jq -r '.[] | select(.ifname=="wg0").addr_info[0].local')
 
 env | grep -E '^TINYPROXY_' | while read "ENV_CONFIG"
 do
