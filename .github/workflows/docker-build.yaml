@@ -14,6 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - uses: docker/setup-qemu-action@v3
+
       - uses: anothrNick/github-tag-action@1.71.0
         id: bump_version
         env:
@@ -40,8 +47,8 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm,linux/arm64
           push: ${{ github.repository_owner == 'dev-dull' }}
-          tags: ${{ steps.docker-meta.outputs.tags }}
-          labels: ${{ steps.docker-meta.outputs.labels }}
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
 
       - uses: softprops/action-gh-release@v2
         with:
