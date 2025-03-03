@@ -1,13 +1,14 @@
-FROM ghcr.io/thrnz/docker-wireguard-pia:latest
+FROM alpine:latest
 
 ARG TINYPROXY_PORT=8888
 
 # The base image is Alpine Linux
-RUN apk add --no-cache tinyproxy jq
+RUN apk add --no-cache tinyproxy jq curl
 
+RUN mkdir /scripts
 COPY tinyproxy_configure.sh /scripts/tinyproxy_configure.sh
-COPY tp_run /scripts/tp_run
-RUN chmod 755 /scripts/tinyproxy_configure.sh /scripts/tp_run
+COPY run /scripts/run
+RUN chmod 755 /scripts/tinyproxy_configure.sh /scripts/run
 
 # The text that follows 'TINYPROXY_' needs to match the name of the configuration item found within the tinyproxy.conf file
 # For configuration items that can be repeated (e.g. 'Allow'), the value should be a comma-separated list to be expanded by tinyproxy_configure.sh
@@ -28,4 +29,4 @@ ENV TINYPROXY_DisableViaHeader=Yes
 
 EXPOSE ${TINYPROXY_PORT}
 
-CMD ["/scripts/tp_run"]
+CMD ["/scripts/run"]
