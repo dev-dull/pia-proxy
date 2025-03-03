@@ -1,7 +1,0 @@
-#!/bin/bash
-
-# Configure and start Tinyproxy
-# Writes the Tinyproxy config to '/etc/tinyproxy/tinyproxy.conf'
-/scripts/tinyproxy_configure.sh
-# Start tinyproxy
-tinyproxy

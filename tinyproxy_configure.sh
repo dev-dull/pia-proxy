@@ -8,6 +8,7 @@ rm ${CONFIG_FILE}
 export TINYPROXY_Listen=$(ip -j a | jq -r '.[] | select(.ifname=="eth0").addr_info[0].local')
 export TINYPROXY_Bind=$(ip -j a | jq -r '.[] | select(.ifname=="wg0").addr_info[0].local')
 
+# TODO: Verify that none of the configuration values are empty ('Bind' is the most common offender)
 env | grep -E '^TINYPROXY_' | while read "ENV_CONFIG"
 do
   CONFIG_ITEM=$(echo ${ENV_CONFIG} | sed 's/TINYPROXY_//1' | grep -Eo '^[^=]+' )
@@ -15,6 +16,7 @@ do
 
   # Some configuration items can be specified more than once (e.g. Allow, Annonymous, etc.), so split them up
   # Breaks if there's ever a ',' in a configuration value that needs to stay a comma
+  # TODO: This functionality is untested!!!
   if [[ -n $(echo ${CONFIG_VALUE} | grep -Eo ',' | head -n 1) ]]; then
     if [[ ${CONFIG_ITEM} == 'Allow' ]]; then
       # If 'Allow' rules were configured, we'll also need to allow the 'Listen' IP or no one will be able to connect

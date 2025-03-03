@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#### Start wireguard
+# run script is blocking with a 'wait $!' and the funky syntax below is the only way I could find to successfully
+# get the script to run in the background while the logging would remain in the foreground.
+$(/scripts/run) &
+
+# Use the healthcheck script from the base image to ensure the 'wg0' interface will have an IP for tinyproxy to 'Bind' to.
+while [ ! $(/scripts/healthcheck.sh) ]
+do
+  echo "Waiting on VPN connectivity..."
+  sleep 1
+done
+
+####
+## Configure and start Tinyproxy
+# Writes the Tinyproxy config to '/etc/tinyproxy/tinyproxy.conf'
+/scripts/tinyproxy_configure.sh
+cat /etc/tinyproxy/tinyproxy.conf
+echo "Starting tinyproxy..."
+# '-d' causes tinyproxy to run in the foreground
+tinyproxy -d
