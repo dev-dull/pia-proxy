@@ -3,7 +3,8 @@ name: Build Docker Image
 on:
   schedule:
     # Refresh monthly to pick up base image updates
-    - cron: '0 0 1 * *'
+    # Base image refreshes on the 1st, so run on the 2nd to capture upstream changes.
+    - cron: '0 0 2 * *'
   push:
     branches:
       - main
