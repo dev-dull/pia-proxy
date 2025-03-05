@@ -6,10 +6,14 @@
 $(/scripts/run) &
 
 # Use the healthcheck script from the base image to ensure the 'wg0' interface will have an IP for tinyproxy to 'Bind' to.
-while [ ! $(/scripts/healthcheck.sh) ]
+/scripts/healthcheck.sh > /dev/null 2>&1
+health=$?
+while [ $health -ne 0 ]
 do
   echo "Waiting on VPN connectivity..."
   sleep 1
+  /scripts/healthcheck.sh > /dev/null 2>&1
+  health=$?
 done
 
 ####

@@ -25,7 +25,7 @@ In the settings of your web browser (e.g. Chrome, Firefox, etc.) configure a man
 ## Additional Tinyproxy configuration
 If you need or want to further fine-tune your Tinyproxy configuration, you can override most of the defaults in the Docker image or specify additional configuration parameters by prefixing an environment variable with `TINYPROXY_`. For example, to change the default port from `8888` to `8765`, configure the environment variable `TINYPROXY_Port=8765`. See the [Tinyproxy documentation](https://tinyproxy.github.io/) for a complete list.
 
-**NOTE:** `Bind` and `Listen` values are automatically configured.
+**NOTE:** `Bind` value is automatically configured.
 
 **NOTE:** Tinyproxy requires certain configuration values to be within quotes. If Tinyproxy fails to start due to a configuration error, double check that quotes are used where required. For example, `ViaProxyName "tinyproxy"` and _NOT_ `ViaProxyName tinyproxy`. The environment variable to configure `ViaProxyName` would look like, `TINYPROXY_ViaProxyName='"tinyproxy"'` (note the use of mixed quotes to ensure the double quotes are retained).
 
