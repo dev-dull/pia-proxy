@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxy-vpn-deployment
+  namespace: proxy-vpn
+  labels:
+    app: proxy-vpn
+spec:
+  selector:
+    matchLabels:
+      app: proxy-vpn
+  template:
+    metadata:
+      labels:
+        app: proxy-vpn
+    spec:
+      containers:
+      - name: pia-proxy
+        image: devdull/pia-proxy:latest
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN"]
+        env:
+        - name: LOC
+          value: "swiss"
+        - name: USER
+          valueFrom:
+            secretKeyRef:
+              name: pia-proxy-secret
+              key: username
+        - name: PASS
+          valueFrom:
+            secretKeyRef:
+              name: pia-proxy-secret
+              key: password
+        ports:
+        - containerPort: 8888
