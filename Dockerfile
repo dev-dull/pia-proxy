@@ -12,17 +12,23 @@ RUN apk add --no-cache \
   tinyproxy
 
 COPY tinyproxy_configure.sh /scripts/tinyproxy_configure.sh
+COPY keepalive.sh /scripts/keepalive.sh
 COPY tp_run /scripts/tp_run
-RUN chmod 755 /scripts/tinyproxy_configure.sh /scripts/tp_run
+RUN chmod 755 /scripts/tinyproxy_configure.sh /scripts/tp_run /scripts/keepalive.sh
+
+# The conneciton to PIA appears to timeout.
+# The below environment variable is the frequency in seconds to curl a PIA endpoint to keep the connection alive.
+# 300 == 5 minutes. See 'keepalive.sh' for more information.
+ENV KEEPALIVE_INTERVAL=300
 
 # The text that follows 'TINYPROXY_' needs to match the name of the configuration item found within the tinyproxy.conf file
 # For configuration items that can be repeated (e.g. 'Allow'), the value should be a comma-separated list to be expanded by tinyproxy_configure.sh
 ENV TINYPROXY_User=nobody
 ENV TINYPROXY_Group=nobody
 ENV TINYPROXY_Port=${TINYPROXY_PORT}
-# Skipping 'TINYPROXY_Listen' -- 'Listen' is configured automatically by tinyproxy_configure.sh since the value isn't known until runtime
+# Skipping 'TINYPROXY_Listen' -- 'Listen' behavior is to listen on all interfaces
 # Skipping 'TINYPROXY_Bind' -- 'Bind' is configured automatically by tinyproxy_configure.sh since the value isn't known until runtime
-ENV TINYPROXY_Timeout=600
+ENV TINYPROXY_Timeout=180
 ENV TINYPROXY_DefaultErrorFile='"/usr/share/tinyproxy/default.html"'
 ENV TINYPROXY_StatFile='"/usr/share/tinyproxy/stats.html"'
 ENV TINYPROXY_XTinyproxy=No

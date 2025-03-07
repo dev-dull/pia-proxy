@@ -6,15 +6,21 @@
 $(/scripts/run) &
 
 # Use the healthcheck script from the base image to ensure the 'wg0' interface will have an IP for tinyproxy to 'Bind' to.
-/scripts/healthcheck.sh > /dev/null 2>&1
+/scripts/healthcheck.sh
 health=$?
 while [ $health -ne 0 ]
 do
   echo "Waiting on VPN connectivity..."
   sleep 1
-  /scripts/healthcheck.sh > /dev/null 2>&1
+  /scripts/healthcheck.sh
   health=$?
 done
+
+#### Currently just a guess, but the VPN connection seems to eventually timeout from inactivity.
+# This script will curl a PIA endpoint every KEEPALIVE_INTERVAL seconds. 0 (zero) will cause it to exit immediately.
+# The script outputs the curl response to /tmp/keepalive.json
+echo "Starting keepalive script..."
+/scripts/keepalive.sh &
 
 ####
 ## Configure and start Tinyproxy
