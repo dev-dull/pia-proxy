@@ -44,7 +44,7 @@ jobs:
             # set latest tag for default branch
             type=raw,value=latest,enable=${{ github.ref_name == 'main' }}
             # Always tag with the current version number
-            type=raw,value=${{ steps.bump_version.outputs.new_tag }},enable=true
+            type=raw,value=${{ steps.bump_version.outputs.new_tag }},enable=${{ github.ref_name == 'main' }}
 
       - uses: docker/build-push-action@v5
         id: docker_build
