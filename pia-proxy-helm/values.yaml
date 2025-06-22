@@ -58,7 +58,7 @@ service:
   # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: LoadBalancer
   # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
-  port: &servicePort 8888
+  port: &servicePort "8888"
   vpn:
     # Secret containing the data values 'username' and 'password' for Private Internet Access (PIA) VPN.
     piaCredentialsSecretName: pia-proxy-secret
