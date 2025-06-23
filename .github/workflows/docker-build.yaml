@@ -65,4 +65,6 @@ jobs:
           token: ${{ secrets.REPO_TOKEN }}
           tag_name: ${{ steps.bump_version.outputs.new_tag }}
           generate_release_notes: true
-          files: '*'
+          files: |
+            *
+            helm-chart/pia-proxy-helm-*.tgz
