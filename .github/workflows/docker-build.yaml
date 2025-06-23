@@ -55,7 +55,7 @@ jobs:
           labels: ${{ steps.docker_meta.outputs.labels }}
 
       - name: Package Helm Chart
-        # [ TODO - Issue #3 ] - The helm package is only being published to the github 'Release' page by the softprops/action-gh-release action
+        # [ TODO - Issue #3 ] - The helm package is only being published to the github 'Release' page by the `softprops/action-gh-release action`
         #                       which runs below. I guess that works, but seems less than ideal.
         run: |
           helm package pia-proxy-helm --destination helm-chart/ --app-version ${{ steps.bump_version.outputs.new_tag }}
