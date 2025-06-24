@@ -58,7 +58,8 @@ jobs:
         # [ TODO - Issue #3 ] - The helm package is only being published to the github 'Release' page by the `softprops/action-gh-release action`
         #                       which runs below. I guess that works, but seems less than ideal.
         run: |
-          helm package pia-proxy-helm --destination helm-chart/ --app-version ${{ steps.bump_version.outputs.new_tag }}
+          version=$(echo ${{ steps.bump_version.outputs.new_tag }} | sed 's/^v//')
+          helm package pia-proxy-helm --destination helm-chart/ --app-version ${{ steps.bump_version.outputs.new_tag }} --version $version
 
       - uses: softprops/action-gh-release@v2
         with:
